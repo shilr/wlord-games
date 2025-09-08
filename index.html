@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>南京照相馆：历史的抉择</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Serif SC', 'SimSun', serif;
+        }
+        
+        body {
+            background: #f5f1e8 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" opacity="0.05"><rect fill="%23444" width="100" height="100"/></svg>');
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: rgba(255, 253, 245, 0.95);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            min-height: 100vh;
+            border-left: 1px solid #d9c7a8;
+            border-right: 1px solid #d9c7a8;
+        }
+        
+        header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)), 
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" opacity="0.1"><rect fill="%23fff" width="100" height="100"/></svg>');
+            color: #f5f1e8;
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 3px solid #8c1515;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+        
+        .sepia-border {
+            height: 8px;
+            background: linear-gradient(to right, #8c1515, #d9c7a8, #8c1515);
+            margin: 1rem 0;
+        }
+        
+        .scene-container {
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .scene-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #d9c7a8;
+        }
+        
+        .scene-title {
+            font-size: 1.8rem;
+            color: #8c1515;
+            font-weight: bold;
+        }
+        
+        .scene-number {
+            background: #8c1515;
+            color: #f5f1e8;
+            padding: 0.3rem 1rem;
+            border-radius: 3px;
+            font-size: 1.1rem;
+        }
+        
+        .scene-content {
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .scene-image {
+            width: 100%;
+            height: 300px;
+            background: #e8e0d0;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8c1515;
+            font-style: italic;
+            border: 1px solid #d9c7a8;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .scene-image::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" opacity="0.05"><rect fill="%23444" width="100" height="100"/></svg>');
+        }
+        
+        .choices {
+            background: #f0ebe0;
+            padding: 1.5rem;
+            border-radius: 5px;
+            border: 1px solid #d9c7a8;
+            margin: 2rem 0;
+        }
+        
+        .choices-title {
+            font-size: 1.3rem;
+            color: #8c1515;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .choice {
+            background: #f5f1e8;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid #8c1515;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .choice:hover {
+            background: #e8e0d0;
+            transform: translateX(5px);
+        }
+        
+        .choice::before {
+            content: "→";
+            position: absolute;
+            left: -20px;
+            color: #8c1515;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .choice:hover::before {
+            opacity: 1;
+        }
+        
+        .reflection {
+            background: #e8e0d0;
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin: 2rem 0;
+            border-top: 3px solid #8c1515;
+            display: none;
+        }
+        
+        .reflection-title {
+            font-size: 1.3rem;
+            color: #8c1515;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .reflection-title::before {
+            content: "✎";
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .reflection-content {
+            font-style: italic;
+            line-height: 1.7;
+        }
+        
+        .reflection-question {
+            font-weight: bold;
+            margin: 1rem 0;
+            color: #5c0e0e;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .nav-btn {
+            background: #8c1515;
+            color: #f5f1e8;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-btn:hover {
+            background: #5c0e0e;
+        }
+        
+        .nav-btn:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+        
+        .nav-btn.prev::before {
+            content: "←";
+            margin-right: 5px;
+        }
+        
+        .nav-btn.next::after {
+            content: "→";
+            margin-left: 5px;
+        }
+        
+        .historical-note {
+            background: #d9c7a8;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid #8c1515;
+            font-size: 0.9rem;
+        }
+        
+        .footer-note {
+            text-align: center;
+            padding: 2rem;
+            color: #777;
+            font-size: 0.9rem;
+            border-top: 1px solid #d9c7a8;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                border: none;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .scene-container {
+                padding: 1rem;
+            }
+            
+            .scene-title {
+                font-size: 1.5rem;
+            }
+            
+            .scene-content {
+                font-size: 1rem;
+            }
+            
+            .scene-image {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>南京照相馆：历史的抉择</h1>
+            <div class="subtitle">在历史的十字路口，你的选择将如何塑造命运？</div>
+        </header>
+        
+        <div class="sepia-border"></div>
+        
+        <div class="scene-container">
+            <div class="scene-header">
+                <div class="scene-title" id="scene-title">照相馆的抉择</div>
+                <div class="scene-number">剧情 <span id="scene-number">1</span>/10</div>
+            </div>
+            
+            <div class="scene-content" id="scene-content">
+                1937年12月，日军逼近南京。作为"南京照相馆"的老板，你看到大批难民涌入城市。你的照相馆地下室可以藏匿约20人，但收留难民将面临巨大风险。此时，一群妇女儿童正在你的店外寻求庇护...
+            </div>
+            
+            <div class="scene-image">
+                历史影像：南京市民在战火中寻求庇护
+            </div>
+            
+            <div class="choices">
+                <div class="choices-title">你的选择是：</div>
+                <div class="choice" data-choice="1">打开照相馆大门，收留这些难民</div>
+                <div class="choice" data-choice="2">拒绝开门，保护自己和家人的安全</div>
+                <div class="choice" data-choice="3">只收留儿童，让成年人另寻他处</div>
+            </div>
+            
+            <div class="reflection" id="reflection">
+                <div class="reflection-title">历史思考</div>
+                <div class="reflection-content">
+                    <p>在战争阴影下，普通人常常面临道德与生存的两难抉择。你的选择反映了在极端环境下的人性考量。</p>
+                    <div class="reflection-question">
+                        思考：当个人安全与他人生命面临冲突时，如何权衡利己与利他？历史中的普通人如何在有限条件下做出人道主义选择？
+                    </div>
+                </div>
+            </div>
+            
+            <div class="historical-note">
+                <strong>历史背景：</strong> 1937年12月南京沦陷前，许多南京市民自发建立安全区，收留难民。约翰·拉贝等国际友人建立的南京安全区保护了约25万中国难民。
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn prev" id="prev-btn" disabled>上一幕</button>
+                <button class="nav-btn next" id="next-btn">下一幕</button>
+            </div>
+        </div>
+        
+        <div class="footer-note">
+            本游戏基于历史事件创作，旨在促进对历史的思考与理解。部分情节为戏剧化表现。
+        </div>
+    </div>
+
+    <script>
+        // 游戏剧情数据
+        const scenes = [
+            {
+                title: "照相馆的抉择",
+                content: "1937年12月，日军逼近南京。作为'南京照相馆'的老板，你看到大批难民涌入城市。你的照相馆地下室可以藏匿约20人，但收留难民将面临巨大风险。此时，一群妇女儿童正在你的店外寻求庇护...",
+                choices: [
+                    "打开照相馆大门，收留这些难民",
+                    "拒绝开门，保护自己和家人的安全",
+                    "只收留儿童，让成年人另寻他处"
+                ],
+                reflection: "在战争阴影下，普通人常常面临道德与生存的两难抉择。你的选择反映了在极端环境下的人性考量。",
+                question: "当个人安全与他人生命面临冲突时，如何权衡利己与利他？历史中的普通人如何在有限条件下做出人道主义选择？",
+                note: "1937年12月南京沦陷前，许多南京市民自发建立安全区，收留难民。约翰·拉贝等国际友人建立的南京安全区保护了约25万中国难民。"
+            },
+            {
+                title: "影像的使命",
+                content: "日军已进入南京城，你在地下室藏匿了18名难民。作为摄影师，你拥有记录历史的能力。一天，你目睹日军在街对面的暴行，手中握着相机...",
+                choices: [
+                    "冒险拍摄这些暴行，为历史留下证据",
+                    "放弃拍摄，保护地下室难民的安全",
+                    "尝试用隐蔽方式记录，如从窗户缝隙拍摄"
+                ],
+                reflection: "历史影像具有不可替代的见证价值，但在极端环境下记录真相需要巨大勇气。",
+                question: "见证与记录历史暴行有何重要意义？记录者如何平衡真相使命与安全风险？",
+                note: "南京大屠杀期间，约翰·马吉牧师秘密拍摄的影像成为东京审判的关键证据，记录了日军的暴行。"
+            },
+            {
+                title: "食物的困境",
+                content: "地下室的存粮即将耗尽，18名难民面临饥饿。你知道附近日军仓库有粮食，但夜间有巡逻队。一位年轻难民自愿冒险去取粮...",
+                choices: [
+                    "阻止他，等待更安全的机会",
+                    "支持他的计划，提供掩护",
+                    "自己亲自去，让年轻人留下"
+                ],
+                reflection: "战争中的资源分配问题常常考验人性，饥饿可能迫使人们做出极端选择。",
+                question: "在资源极度匮乏的情况下，领导者如何分配有限资源？冒险获取资源是否正当？",
+                note: "南京大屠杀期间，粮食短缺导致大量平民死亡。国际安全区委员会成员每天冒险为25万难民寻找食物。"
+            },
+            {
+                title: "意外的访客",
+                content: "一名受伤的日本士兵倒在你的照相馆门口，其他日军正在搜捕'逃兵'。地下室难民要求你将他赶走，但他伤势严重...",
+                choices: [
+                    "救助这名士兵，藏匿在阁楼",
+                    "拒绝帮助，保护地下室难民",
+                    "为他简单包扎后劝其离开"
+                ],
+                reflection: "战争中的个体常常被裹挟在历史洪流中，敌对双方的个人也可能产生人道联结。",
+                question: "在战争中，是否应该对敌方士兵施以人道援助？个体责任与集体仇恨如何平衡？",
+                note: "历史上有许多普通人在战争中向敌方伤兵提供帮助的事例，展现了超越敌我的人道精神。"
+            },
+            {
+                title: "告密者的阴影",
+                content: "你发现难民中有人向日军告密以换取食物。地下室位置可能暴露，但告密者是一位带着婴儿的母亲...",
+                choices: [
+                    "当众揭发她，驱逐出地下室",
+                    "私下警告她，给予改过机会",
+                    "加强警戒但保持沉默，理解她的处境"
+                ],
+                reflection: "极端环境可能扭曲人性，生存压力下道德界限变得模糊。",
+                question: "如何看待战争中的'合作者'？生存本能与道德背叛的界限在哪里？",
+                note: "在占领区，确实存在当地人被迫或自愿与占领者合作的情况，动机复杂多样。"
+            },
+            {
+                title: "最后的胶片",
+                content: "你只剩最后一张胶片。此时可以选择拍摄：1) 地下室难民的生活；2) 窗外日军暴行；3) 家人最后的合影...",
+                choices: [
+                    "拍摄日军暴行，作为历史证据",
+                    "拍摄难民生活，记录抗争精神",
+                    "拍摄家人合影，保留私人记忆"
+                ],
+                reflection: "影像选择反映了记录者的价值观和历史观，每一帧都是对历史的诠释。",
+                question: "历史记录应该侧重揭露黑暗还是保存希望？私人记忆与公共历史如何平衡？",
+                note: "许多大屠杀幸存者的家庭照片成为珍贵历史文物，同时暴行影像也是重要证据。"
+            },
+            {
+                title: "医疗的抉择",
+                content: "地下室爆发传染病，药品只够治疗一半的人。一位医生建议优先治疗儿童和健康成人，放弃老人和重症者...",
+                choices: [
+                    "接受医生的建议，最大化生存率",
+                    "平等分配药品，听天由命",
+                    "冒险外出寻找更多药品"
+                ],
+                reflection: "战时的医疗资源分配涉及深刻的伦理困境，不同文化有不同的优先选择标准。",
+                question: "医疗资源极度匮乏时，应该根据什么标准分配？生存概率、年龄、社会价值还是平等原则？",
+                note: "南京安全区医院曾面临类似困境，医生们常常不得不在绝望中做出艰难抉择。"
+            },
+            {
+                title: "身份的秘密",
+                content: "你发现一名难民是国军军官，日军正在全城搜捕。收留他可能危及所有人，但他掌握重要情报...",
+                choices: [
+                    "继续收留他，保护抗战军人",
+                    "请他离开，保护其他难民",
+                    "帮他伪装身份，留在避难所"
+                ],
+                reflection: "战争中的身份政治可能带来额外危险，但也可能蕴含抵抗的希望。",
+                question: "特殊身份者在群体中应该公开还是隐藏？群体安全与个体保护如何权衡？",
+                note: "许多中国军人脱下军装混入平民，部分被日军搜出后遭到杀害。"
+            },
+            {
+                title: "希望的传递",
+                content: "你获得与外界联络的机会，可以传递一则消息。选择：1) 求救信息；2) 日军暴行证据；3) 难民名单...",
+                choices: [
+                    "传递暴行证据，揭露真相",
+                    "传递求救信息，寻求援助",
+                    "传递难民名单，保存历史记录"
+                ],
+                reflection: "有限的沟通机会承载着多重使命，每个选择都反映了不同的历史责任。",
+                question: "在危机中，信息传递应该优先考虑即时救援还是历史见证？",
+                note: "南京大屠杀期间，金陵女子文理学院负责人魏特琳女士的日记成为重要历史文献。"
+            },
+            {
+                title: "战争之后",
+                content: "战争结束，幸存者准备离开。照相馆将被拆除，你保存的底片需要处理。一位日本记者想购买这些历史影像...",
+                choices: [
+                    "拒绝出售，捐赠给历史博物馆",
+                    "出售部分底片，用于重建照相馆",
+                    "保留所有底片，作为私人记忆"
+                ],
+                reflection: "历史记忆的保存方式影响后世对历史的理解，承载着对逝者的责任。",
+                question: "历史见证者如何平衡记忆保存与现实需求？历史文物应该公共化还是私人化？",
+                note: "许多南京大屠杀的珍贵史料正是通过幸存者和外国见证者保存下来的。"
+            }
+        ];
+
+        // 游戏状态
+        let currentScene = 0;
+        let playerChoices = [];
+        
+        // DOM元素
+        const sceneTitleEl = document.getElementById('scene-title');
+        const sceneNumberEl = document.getElementById('scene-number');
+        const sceneContentEl = document.getElementById('scene-content');
+        const choicesEl = document.querySelector('.choices');
+        const reflectionEl = document.getElementById('reflection');
+        const reflectionContentEl = document.querySelector('.reflection-content');
+        const historicalNoteEl = document.querySelector('.historical-note');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        
+        // 渲染当前场景
+        function renderScene() {
+            const scene = scenes[currentScene];
+            
+            sceneTitleEl.textContent = scene.title;
+            sceneNumberEl.textContent = currentScene + 1;
+            sceneContentEl.textContent = scene.content;
+            historicalNoteEl.innerHTML = `<strong>历史背景：</strong> ${scene.note}`;
+            
+            // 渲染选择项
+            choicesEl.innerHTML = `
+                <div class="choices-title">你的选择是：</div>
+                ${scene.choices.map((choice, index) => `
+                    <div class="choice" data-choice="${index + 1}">${choice}</div>
+                `).join('')}
+            `;
+            
+            // 添加选择事件监听
+            document.querySelectorAll('.choice').forEach(choice => {
+                choice.addEventListener('click', handleChoice);
+            });
+            
+            // 渲染思考环节
+            reflectionContentEl.innerHTML = `
+                <p>${scene.reflection}</p>
+                <div class="reflection-question">
+                    ${scene.question}
+                </div>
+            `;
+            
+            // 隐藏思考环节直到选择后
+            reflectionEl.style.display = 'none';
+            
+            // 更新导航按钮状态
+            updateNavigation();
+        }
+        
+        // 处理玩家选择
+        function handleChoice(e) {
+            const choiceIndex = parseInt(e.currentTarget.dataset.choice) - 1;
+            const scene = scenes[currentScene];
+            
+            // 保存玩家选择
+            playerChoices[currentScene] = {
+                scene: scene.title,
+                choice: scene.choices[choiceIndex]
+            };
+            
+            // 显示思考环节
+            reflectionEl.style.display = 'block';
+            
+            // 滚动到思考环节
+            reflectionEl.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // 更新导航按钮状态
+        function updateNavigation() {
+            prevBtn.disabled = currentScene === 0;
+            nextBtn.disabled = currentScene === scenes.length - 1;
+        }
+        
+        // 导航按钮事件
+        prevBtn.addEventListener('click', () => {
+            if (currentScene > 0) {
+                currentScene--;
+                renderScene();
+            }
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            if (currentScene < scenes.length - 1) {
+                currentScene++;
+                renderScene();
+            }
+        });
+        
+        // 初始化游戏
+        function initGame() {
+            renderScene();
+        }
+        
+        // 启动游戏
+        initGame();
+    </script>
+</body>
+</html>
